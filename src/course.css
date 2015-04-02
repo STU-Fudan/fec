@@ -1,0 +1,139 @@
+body {
+  height: 100%;
+  overflow: hidden;
+  opacity: 0;
+  -webkit-transition: opacity .3s ease;
+  -moz-transition: opacity .3s ease;
+  -ms-transition: opacity .3s ease;
+  -o-transition: opacity .3s ease;
+  transition: opacity .3s ease;
+}
+
+.deck-container {
+  font-family: "Open Sans", "Hiragino Sans GB", "Lantinghei TC", "Lantinghei SC", Helvetica, Arial, "Heiti SC", "Heiti TC", "Microsoft Yahei", "Microsoft Jhenghei", "Droid Sans Fallback";
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck-status {
+  text-align: right;
+}
+
+.slide {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+textarea {
+  width: calc(100% - 1em);
+  padding: 0.5em;
+  margin-top: 1em;
+  border: 2px solid #1575CC;
+}
+
+pre.course-code {
+  height: 200px;
+  margin-top: 1em;
+  font-size: .6em;
+  border: 2px solid #c8c8c8;
+}
+
+pre, code, kbd, samp, textarea {
+  font-family: "Consolas", monospace, sans-serif;
+  -moz-tab-size:    4;
+  -o-tab-size:      4;
+  -webkit-tab-size: 4;
+  -ms-tab-size:     4;
+  tab-size:         4;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+.t > textarea {
+  border: 2px solid #0DCC11;
+}
+
+.f > textarea {
+  border: 2px solid #CC0C1D;
+}
+
+.t:after {
+  display: block;
+  content: '✔';
+  color: #0DCC11;
+  text-align: center;
+}
+
+.f:after {
+  display: block;
+  content: '✘';
+  color: #CC0C1D;
+  text-align: center;
+}
+
+table {
+  text-align: center;
+  table-layout: fixed;
+}
+
+th, td {
+  vertical-align: middle;
+  padding: 5px 10px;
+  border: 1px solid;
+}
+
+.course-note {
+  position: relative;
+  cursor: pointer;
+}
+
+.course-note:hover .course-note-inner {
+  display: inherit;
+}
+
+.course-note-inner {
+  display: none;
+  position: absolute;
+  font-size: 22px;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1px;
+  background-color: white;
+}
+
+.course-note sup {
+  color: #1919BA;
+}
+
+.course-playground-input {
+  display: inline-block;
+  float: left;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  width: calc(50% - 1.5em);
+  height: 150px;
+  font-size: .6em;
+}
+
+.course-playground-result {
+  float: right;
+  margin: 0;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  width: calc(50% - 0.5em);
+  height: calc(150px + .6em);
+  overflow: scroll;
+}
+
+@media screen and (max-width: 960px) {
+  .deck-container {
+    font-size: 1.25em;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .deck-container {
+    font-size: 1em;
+  }
+}

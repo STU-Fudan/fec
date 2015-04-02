@@ -1,0 +1,18 @@
+{
+  "path": "docs/",
+  "cover": "cover.md",
+  "course": [
+    {
+      "name": "前言",
+      "slide": [
+        "preface.md"
+      ]
+    },
+    {
+      "name": "HTML",
+      "slide": [
+        "HTML-1.md"
+      ]
+    }
+  ]
+}
