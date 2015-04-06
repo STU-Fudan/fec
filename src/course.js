@@ -58,12 +58,24 @@
     }
 
     function loadPlayground() {
-        $('.course-playground').each(function () {
+        $('.course-playground-html').each(function () {
             var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
                 $input = $(this).children('.course-playground-input');
 
             var refresh = function () {
                 contentWindow.document.body.innerHTML = $(this).val();
+            };
+
+            $input.on('keyup', refresh);
+            refresh.call($input[0]);
+        });
+        $('.course-playground-css').each(function () {
+            var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
+                html = $(this).children('.course-playground-result')[0].dataset['content'],
+                $input = $(this).children('.course-playground-input');
+
+            var refresh = function () {
+                contentWindow.document.body.innerHTML = '<style>' + $(this).val() + '</style>' + html;
             };
 
             $input.on('keyup', refresh);
@@ -97,7 +109,10 @@
                 return b + ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + c + '</span></span> ';
             })
             .replace(/([^\t`])\[playground html init=['"]([\s\S]+?)['"]\]/g, function (a, b, c) {
-                return b + '<p class="course-playground"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result"></iframe></p>';
+                return b + '<p class="course-playground course-playground-html"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result"></iframe></p>';
+            })
+            .replace(/([^\t`])\[playground css init=['"]([\s\S]+?)['"] html=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d) {
+                return b + '<p class="course-playground course-playground-css"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + d + '"></iframe></p>';
             })
             .replace(/([^\t`])\$([^`]+?)\$/g, function (a, b, c) {
                 return b + '<span class="course-math">' + c + '</span>';

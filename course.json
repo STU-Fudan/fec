@@ -13,6 +13,12 @@
       "slide": [
         "HTML-1.md"
       ]
+    },
+    {
+      "name": "CSS",
+      "slide": [
+        "CSS-1.md"
+      ]
     }
   ]
 }
