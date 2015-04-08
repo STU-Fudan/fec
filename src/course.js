@@ -57,13 +57,32 @@
         loadPlayground();
     }
 
+    function bindCodeEditor(textarea) {
+        new Behave({
+            textarea:   textarea,
+            replaceTab: true,
+            softTabs:   true,
+            tabSize:    4,
+            autoOpen:   true,
+            overwrite:  true,
+            autoStrip:  true,
+            autoIndent: true
+        });
+    }
+
     function loadPlayground() {
         $('.course-playground-html').each(function () {
             var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
+                css = $(this).children('.course-playground-result')[0].dataset['style'] || '',
                 $input = $(this).children('.course-playground-input');
 
+            if (css)
+                css = atob(css);
+
+            bindCodeEditor($(this).children('.course-playground-input')[0]);
+
             var refresh = function () {
-                contentWindow.document.body.innerHTML = $(this).val();
+                contentWindow.document.body.innerHTML = '<style>' + css + '</style>' + $(this).val();
             };
 
             $input.on('keyup', refresh);
@@ -71,15 +90,70 @@
         });
         $('.course-playground-css').each(function () {
             var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
-                html = $(this).children('.course-playground-result')[0].dataset['content'],
+                html = $(this).children('.course-playground-result')[0].dataset['content'] || '',
+                css = $(this).children('.course-playground-result')[0].dataset['style'] || '',
                 $input = $(this).children('.course-playground-input');
 
-            var refresh = function () {
-                contentWindow.document.body.innerHTML = '<style>' + $(this).val() + '</style>' + html;
+            var $container = $(this);
+
+            var test = this.dataset['test'];
+
+            if (html)
+                html = atob(html);
+            if (css)
+                css = atob(css);
+            if (test)
+                test = atob(test);
+
+            var bindObj = {
+                html: html,
+                css: css,
+                testFn: null,
+                $container: $container,
+                $input: $input,
+                contentWindow: contentWindow,
+                bindFn: function () {
+                    var refresh = function () {
+                        bindObj.contentWindow.document.body.innerHTML = '<style>' + bindObj.css + '\n' + $(this).val() + '</style>' + bindObj.html;
+                        if (bindObj.testFn) {
+                            var result = bindObj.testFn(contentWindow);
+                            if (result)
+                                bindObj.$container.removeClass('f').addClass('t');
+                            else
+                                bindObj.$container.removeClass('t').addClass('f');
+                        }
+                    };
+
+                    bindObj.$input.on('keyup', refresh);
+                    refresh.call(bindObj.$input[0]);
+                }
             };
 
-            $input.on('keyup', refresh);
-            refresh.call($input[0]);
+            if (test) {
+                $.get(test, function (data) {
+                    var testFn = function (window) {
+                        var document = window.document,
+                            result = 0;
+                        eval(data);
+                        return result;
+                    };
+                    bindObj.testFn = testFn;
+                    bindObj.bindFn();
+                }, 'text');
+            }
+            else
+                bindObj.bindFn();
+
+            bindCodeEditor($(this).children('.course-playground-input')[0]);
+        });
+
+        // Behave hooks
+
+        BehaveHooks.add(['keydown'], function(data){
+            var numLines = data.lines.total,
+                fontSize = parseFloat(getComputedStyle(data.editor.element)['font-size']) + 2,
+                padding = parseInt(getComputedStyle(data.editor.element)['padding']);
+            data.editor.element.style.height = Math.max((((numLines * fontSize) + padding)), 150) + 'px';
         });
     }
 
@@ -108,11 +182,35 @@
             .replace(/([^\t`])\[note ([\s\S]+?)\]/g, function (a, b, c) {
                 return b + ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + c + '</span></span> ';
             })
+            .replace(/([^\t`])\[playground html init=['"]([\s\S]+?)['"] css=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d) {
+                c = c.replace(/\\n/g, function () {
+                    return '\n';
+                });
+                return b + '<p class="course-playground course-playground-html"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-style="' + btoa(d) + '"></iframe></p>';
+            })
             .replace(/([^\t`])\[playground html init=['"]([\s\S]+?)['"]\]/g, function (a, b, c) {
+                c = c.replace(/\\n/g, function () {
+                    return '\n';
+                });
                 return b + '<p class="course-playground course-playground-html"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result"></iframe></p>';
             })
+            .replace(/([^\t`])\[playground css init=['"]([\s\S]+?)['"] html=['"]([\s\S]+?)['"] css=['"]([\s\S]+?)['"] test=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d, e, f) {
+                c = c.replace(/\\n/g, function () {
+                    return '\n';
+                });
+                return b + '<p class="course-playground course-playground-css" data-test="' + btoa(f) + '"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + btoa(d) + '" data-style="' + btoa(e) + '"></iframe></p>';
+            })
+            .replace(/([^\t`])\[playground css init=['"]([\s\S]+?)['"] html=['"]([\s\S]+?)['"] css=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d, e) {
+                c = c.replace(/\\n/g, function () {
+                    return '\n';
+                });
+                return b + '<p class="course-playground course-playground-css"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + btoa(d) + '" data-style="' + btoa(e) + '"></iframe></p>';
+            })
             .replace(/([^\t`])\[playground css init=['"]([\s\S]+?)['"] html=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d) {
-                return b + '<p class="course-playground course-playground-css"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + d + '"></iframe></p>';
+                c = c.replace(/\\n/g, function () {
+                    return '\n';
+                });
+                return b + '<p class="course-playground course-playground-css"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + btoa(d) + '"></iframe></p>';
             })
             .replace(/([^\t`])\$([^`]+?)\$/g, function (a, b, c) {
                 return b + '<span class="course-math">' + c + '</span>';

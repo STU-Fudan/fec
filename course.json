@@ -11,13 +11,8 @@
     {
       "name": "HTML",
       "slide": [
-        "HTML-1.md"
-      ]
-    },
-    {
-      "name": "CSS",
-      "slide": [
-        "CSS-1.md"
+        "HTML-1.md",
+        "HTML-2.md"
       ]
     }
   ]
