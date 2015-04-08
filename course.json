@@ -14,6 +14,12 @@
         "HTML-1.md",
         "HTML-2.md"
       ]
+    },
+    {
+      "name": "CSS",
+      "slide": [
+        "CSS-1.md"
+      ]
     }
   ]
 }
