@@ -1,107 +1,164 @@
-# CSS基础
+# CSS 基础
 
-## 关于CSS
-CSS定义了网页中所有元素的样式，是网页中不可或缺的一部分。
+## 关于 CSS
+（HTML 定义了网页元素的逻辑结构）CSS 定义了网页中所有元素的样式，是网页中不可或缺的一部分。
 
-## 使用CSS
+## 初步使用 CSS
 
-1. 引入式：通过`<link>`标签引入外部的CSS文件
+[playground html init='<p>复旦学生网</p>
+<p style="color: red">复旦学生网</p>']
 
-	`<link rel="stylesheet" href="/css/example.css" />`
+注意下面的 `p style="color: red"` 写法，表示：
 
-2. 嵌入式：在`<head>`标签中写入CSS
+__这个段落（p）的样式（style）为 `color: red`，也就是红色。__
 
-	<head>
-		<!-- Other part in head-->
-		<style type="text/css">/* css here */</style>
-	</head>
+「color: red」就是一条最简单的 CSS 规则。
 
-3. 内联式：在HTML标签中直接定义`style`属性（不推荐）
+## CSS 的语法
 
-	`<p style="color:#f00; line-height:150%;">This is not a good idea.</p>`
+一套 CSS 样式由许多规则组成。每条规则基本上是「属性：值」的形式（例如 `color: red`），多条规则用「;」分隔开。
 
-## CSS选择器
+[playground html init='<p>复旦学生网</p>
+<p style="color: white; background-color: red">复旦学生网</p>']
 
-CSS选择器可以帮助浏览器将样式应用于部分特定的元素。我们将用以下这段代码来演示不同类型的选择器所起到的作用。
+例如 `color: white; background-color: red` 就是「前景色：白色，背景色：红色」的一套样式。
 
-	<div class="box" id="article">
-		<h1>New Photos <small>10:30</small></h1>
-		<p class="first">Paragraph 1</p>
-		<p class="second">Paragraph 2</p>
-		<p class="thirs">Paragraph 3</p>
-		<a href="#" class="btn back">Back</a>
-		<a href="#" class="btn edit">Edit</a>
-	</div>
-	<p>Paragraph 4</p>
-	<a href="#" class="btn top">Top</a>
+## 常用语句
 
-## CSS选择器
+[playground html init='<p style="font-size: 25px">字号</p>
+<p style="text-align: center">居中</p>
+<p style="text-align: right">居右</p>']
 
-#### 标签选择器 `tagname{}`
-[playground css init='h1{
-	color:#f00;
-	font-size:24px;
-	font-weight:bold;
-}' html='<div class="box" id="article">	<h1>New Photos <small>10:30</small></h1><p class="first">Paragraph 1</p><p class="second">Paragraph 2</p><p class="thirs">Paragraph 3</p><a href="#" class="btn back">Back</a><a href="#" class="btn edit">Edit</a></div><p>Paragraph 4</p><a href="#" class="btn top">Top</a>']
+除了 `color`、`background-color` 之外，常用的文字样式规则还有 `font-size`（表示字号，单位是 px，像素）、`text-align`（文字对齐）、`font-family`（字体）等等。
 
-## CSS选择器
+## 另一种写法
 
-#### Id选择器 `#ElementId{}`
-[playground css init='#box{
-	color:#f00;
-	margin:0;
-	padding:10px;
-}' html='<div class="box" id="article">	<h1>New Photos <small>10:30</small></h1><p class="first">Paragraph 1</p><p class="second">Paragraph 2</p><p class="thirs">Paragraph 3</p><a href="#" class="btn back">Back</a><a href="#" class="btn edit">Edit</a></div><p>Paragraph 4</p><a href="#" class="btn top">Top</a>']
+	<p style="color: red; font-size: 20px; text-align: center">一套 CSS 样式由许多规则组成。</p>
 
-## CSS选择器
+这一行代码太长了，读起来浑身难受。
 
-#### Class选择器 `.classname{}`
-[playground css init='.btn{
-	background-color:#f00;
-	color:#fff;
-	display:block;
-	height:20px;
-	width:120px;
-}' html='<div class="box" id="article">	<h1>New Photos <small>10:30</small></h1><p class="first">Paragraph 1</p><p class="second">Paragraph 2</p><p class="thirs">Paragraph 3</p><a href="#" class="btn back">Back</a><a href="#" class="btn edit">Edit</a></div><p>Paragraph 4</p><a href="#" class="btn top">Top</a>']
+我们需要把样式（CSS）和结构（HTML）分离开来。
 
-## CSS选择器
+## style 标签
 
-#### 部分选择器
-[playground css init='.btn:hover{
-	background-color:#00f;
-}' html='<div class="box" id="article">	<h1>New Photos <small>10:30</small></h1><p class="first">Paragraph 1</p><p class="second">Paragraph 2</p><p class="thirs">Paragraph 3</p><a href="#" class="btn back">Back</a><a href="#" class="btn edit">Edit</a></div><p>Paragraph 4</p><a href="#" class="btn top">Top</a>']
-
-## CSS选择器
-#### 组合使用
-* 选择器可以组合使用
-	* 选择器间以**逗号**分隔：用于统一定义不同选择器共有的样式
-	* 选择器间以**空格**分隔：用于定义某一特定部分中选择器所选中的元素的样式
-* **选择器内不能够嵌套选择器**
-
-[playground css init='#article .btn{
-	color:#00f;
+[playground html init='<style>
+p {
+  color: red;
+  font-size: 20px;
+  text-align: center; 
 }
+</style>
+<p>一套 CSS 样式由许多规则组成。</p>']
 
-.box .first{
-	color:green;
-}' html='<div class="box" id="article">	<h1>New Photos <small>10:30</small></h1><p class="first">Paragraph 1</p><p class="second">Paragraph 2</p><p class="thirs">Paragraph 3</p><a href="#" class="btn back">Back</a><a href="#" class="btn edit">Edit</a></div><p>Paragraph 4</p><a href="#" class="btn top">Top</a>']
+可以用 `<style>` 标签 __统一地__ 声明这个页面中的 CSS。
 
-## CSS选择器
-#### 练习
-解释以下选择器的意义
+`p { ... }` 表示 __将花括号中的样式统一应用到 p 标签上__。
 
-* `#footer ul li a {}`
-* `.icon.green span {}`
-* `p.first span.number {}`
-* `#header li.first a:hover {}`
-* `#result li:hover a.btn_del {}`
+## 因此这样也都是可以的
 
-## 常见的CSS属性（部分）
-* 版面：`position`、`float`、`text-align`、`z-index`
-* 布局：`height`、`width`、`margin`、`padding`
-* 背景：`background`、`border`
-* 前景：`color`
-* 段落：`text-indent`、`line-height`
-* 字体：`font-family`、`font-size`、`font-weight`、`text-decoration`
+`p { ... }` 会应用到 __所有__ p 标签上。
 
-练习：请自行查阅[W3School](http://www.w3school.com.cn/)以了解以上标签的含义与用法。
+[playground html init='<style>
+p {
+  color: blue;
+}
+</style>
+<p>段落 A</p>
+<p>段落 B</p>']
+
+样式之间会叠加和覆盖，例如：
+
+[playground html init='<style>
+p { color: blue; }
+a { color: red; }
+</style>
+<p>蓝色段落 <a href="http://example.com">一个红色链接</a>。</p>']
+
+## 一个问题
+
+我希望两个段落颜色不同。
+
+[playground html init='<style>
+p { color: blue; }
+p { color: red; }
+</style>
+<p>段落 A</p>
+<p>段落 B</p>']
+
+……it doesn't work
+
+![](./docs/mood/11.png)
+
+## 区分两个标签
+
+[playground html init='<p id="p1">段落 A</p>
+<p id="p2">段落 B</p>']
+
+先给两个段落分别加上 __id__ 属性 `p1` 和 `p2`，用以区分它们。
+
+[playground html init='<style>
+p#p1 { color: blue; }
+p#p2 { color: red; }
+</style>
+<p id="p1">段落 A</p>
+<p id="p2">段落 B</p>']
+
+`p#p1` 在 CSS 中表示「id 为 p1 的 p 标签」。
+
+## 注意
+
+不能有两个元素 id 相同，一个 id 唯一确定了一个元素。
+
+因此 `p#p1` 在 CSS 中也可以干脆写成 `#p1`。
+
+![](./docs/mood/50.png)
+
+## 问题又来了
+
+假设现在有 __五百个__ `<p>段落 A</p>`，__五百个__ `<p>段落 B</p>`。
+
+要求段落 A 都是蓝色，段落 B 都是红色。如果只能用 id，那么解决方式是（1000 行各不相同的 HTML）：
+
+	<p id="p1">段落 A</p>
+	<p id="p2">段落 A</p>
+	...
+	<p id="p500">段落 A</p>
+	<p id="p501">段落 B</p>
+	<p id="p502">段落 B</p>
+	...
+	<p id="p1000">段落 B</p>
+	
+然后再写 1000 条 CSS 规则。
+
+## 我们需要 class
+
+`class` 划分了一类元素。
+
+[playground html init='<style>
+p.pr { color: red; }
+</style>
+
+<p class="pr">段落 A</p>
+<p class="pr">段落 B</p>
+<p>段落 C</p>']
+
+`class` 属性在 CSS 中的标注是「.」，`id` 则是「#」。
+
+`class` 和 `id` 最大的区别是，允许多个元素有同一个 `class` 值（从面向对象的角度就很容易理解 class 与 id 了）。
+
+## 刚才的问题
+
+	<p id="pb">段落 A</p>
+	<p id="pb">段落 A</p>
+	...
+	<p id="pb">段落 A</p>
+	<p id="pr">段落 B</p>
+	...
+	<p id="pr">段落 B</p>
+	
+加上
+
+	p.pb { color: blue; }
+	p.pr { color: red; }
+	
+没错，最大的变化是代码可以复制粘贴了，看起来也简洁明了。
